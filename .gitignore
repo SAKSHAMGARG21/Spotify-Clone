@@ -10,6 +10,8 @@ node_modules
 *.docx
 data.md
 
+# My Folder
+PersonalData
 # Logs
 logs
 *.log
