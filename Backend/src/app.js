@@ -9,8 +9,8 @@ dotenv.config();
 // middleware
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
-    Credentials: true,
-}));
+    credentials:true
+}))
 
 app.use(cookieParser());
 app.use(express.json({ limit: '16mb' }));
@@ -25,6 +25,7 @@ import userRouter from "./routes/user.routes.js"
 import songRouter from "./routes/song.routes.js"
 import playlistRouter from "./routes/playlist.routes.js"
 import albumRouter from "./routes/album.routes.js"
+import { connect } from "mongoose";
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/song", songRouter);
 app.use("/api/v1/playlist", playlistRouter);

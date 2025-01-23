@@ -10,7 +10,6 @@ const userSchema = new Schema({
     },
     fullName: {
         type: String,
-        required: true,
         trim: true,
     },
     profileImage: {
@@ -24,7 +23,7 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: [true, "Password is required"],
+        // required: [true, "Password is required"],
     },
     songs: [
         {

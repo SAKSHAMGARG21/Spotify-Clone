@@ -5,6 +5,39 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { createTokenforUser } from "../utils/generateToken.js";
+import { oauth2client } from "../utils/GoogleConfig.js";
+import axios from "axios";
+import jwt from "jsonwebtoken";
+
+export const googleLogin = asyncHandler(async (req, res) => {
+    const code = req.query.code;
+    const googleRes = await oauth2client.getToken(code);
+    oauth2client.setCredentials(googleRes.tokens);
+
+
+    const userRes = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`);
+
+    const { email, name, picture } = userRes.data;
+
+    let user = await User.findOne({ email });
+    if (!user) {
+        user = await User.create({
+            userName: name.split(" ")[0],
+            email,
+            fullName: name,
+            profileImg: picture,
+            // password: Math.random().toString(36).slice(-8) // generate a random password
+        })
+    }
+
+    const token = await createTokenforUser(user._id);
+    return res.status(200)
+        .cookie('token', token, { httpOnly: true, sameSite: "none", secure: true, maxAge: 2 * 60 * 60 * 1000 })
+        .json(
+            new ApiResponse(200, { user: user, token: token }, "Successfully login")
+        )
+
+})
 
 export const sendOtp = asyncHandler(async (req, res) => {
     const { email } = req.body;
@@ -32,7 +65,7 @@ export const sendOtp = asyncHandler(async (req, res) => {
 const verifyOtp = async (email, otp) => {
 
     const user = await Otp.find({ email }).sort({ createdAt: -1 }).limit(1);
-    // console.log(user);
+    console.log(user);
 
     if (!user) {
         throw new ApiError(404, "User with this email not found for otp validation");
@@ -96,7 +129,7 @@ export const registerUser = asyncHandler(async (req, res) => {
         userName: userName.toLowerCase(),
         fullName,
         profileImage: img,
-        email:email.toLowerCase(),
+        email: email.toLowerCase(),
         password,
     })
 
@@ -113,13 +146,12 @@ export const registerUser = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).json(
-        new ApiResponse(200, newUser, "User created Successfully")
+        new ApiResponse(200, newUser, "Signup Successfully")
     )
 })
 
 export const login = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
-
     let userName;
     if (!email.includes("@gmail.com")) {
         userName = email;
@@ -136,7 +168,7 @@ export const login = asyncHandler(async (req, res) => {
     })
 
     if (!user) {
-        throw new ApiError(404, "User not found");
+        throw new ApiError(404, "User Not Found")
     }
 
     const validPass = user.isPasswordCorrect(password);
@@ -155,8 +187,8 @@ export const login = asyncHandler(async (req, res) => {
 
     const option = {
         httpOnly: true,
-        sameSite: "none",
-        secure: true,
+        sameSite: "Lax",
+        secure: false,
         maxAge: 2 * 60 * 60 * 1000
     }
 
@@ -190,8 +222,29 @@ export const logout = asyncHandler(async (req, res) => {
 
 export const profileData = asyncHandler(async (req, res) => {
     return res.status(200).json(
-        new ApiResponse(200,req.user , "User data fetched successfully")
+        new ApiResponse(200, req.user, "User data fetched successfully")
     )
+})
+
+export const refreshNewToken = asyncHandler(async (req, res) => {
+    const token = req.cookies.token || req.body.token;
+    const decodedUser = jwt.verify(token, process.env.TOKEN_SECRET);
+
+    const user = await User.findById(decodedUser._id);
+
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+
+    if (!user.token || user.token !== token) {
+        throw new ApiError(401, "Unauthorized request. Invalid refresh token");
+    }
+
+    return res.status(200)
+        .json(
+            new ApiResponse(200, { user, token }, "new token generated successfully")
+        )
+
 })
 
 

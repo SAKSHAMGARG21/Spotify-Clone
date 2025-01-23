@@ -7,10 +7,6 @@ dotenv.config({
 })
 const PORT = process.env.PORT || 8000;
 
-// app.get("/api/v1/user/sendOtp", (req, res) => {
-//     res.send("this is soptify backend");
-// })
-
 connectDb().then(() => {
     app.listen(PORT || 8000, () => {
         console.log(`Server is running at the port : ${PORT}`);
