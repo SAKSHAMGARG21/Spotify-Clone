@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../modules/user.model.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 
 export const verifyJwt = asyncHandler(async (req, res, next) => {
@@ -47,7 +48,10 @@ export const isArtist = asyncHandler(async (req, res, next) => {
 
 export const isAdmin = asyncHandler(async (req, res, next) => {
     if (req.user.role !== "Admin") {
-        throw new ApiError(401, "This is protected route only for Admin");
+        // throw new ApiError(401, "This is protected route only for Admin");
+        return res.status(250).json(
+            new ApiResponse(250, false, "No")
+        )
     }
     next();
 })
@@ -55,7 +59,10 @@ export const isAdmin = asyncHandler(async (req, res, next) => {
 export const mainAdmin = asyncHandler(async (req, res, next) => {
     if (req.user.role !== 'Admin') {
         if (req.user.email !== process.env.ADMIN_EMAIL) {
-            throw new ApiError(401, "This is protected route only for main Admin");
+            // throw new ApiError(401, "This is protected route only for main Admin");
+            return res.status(250).json(
+                new ApiResponse(250, false, "No")
+            )
         }
     }
     next();

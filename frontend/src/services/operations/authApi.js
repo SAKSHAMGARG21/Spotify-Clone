@@ -9,11 +9,13 @@ const {
     Signup,
     Login,
     Logout,
-    Profile
+    Profile,
+    FetchUsers,
+    IsAdmin
 } = authApis
 
 export const googleAuth = async (code) => {
-    const res=await axios.get(`${GoogleAuth}${code}`);
+    const res = await axios.get(`${GoogleAuth}${code}`);
     return res;
 };
 
@@ -23,7 +25,6 @@ export const sendOtp = (email, navigate) => {
         dispatch(setLoading(true));
         try {
             const res = await axios.post(SendOtp, { email });
-            console.log(res);
             if (!res.data.success) {
                 toast.error(res.data.message);
             }
@@ -44,7 +45,6 @@ export const register = (formData, navigate) => {
         dispatch(setLoading(true));
         try {
             const res = await axios.post(Signup, formData);
-            console.log(res);
             if (!res.data.success) {
                 toast.error(res.data.message);
             }
@@ -63,12 +63,15 @@ export const login = (data, navigate) => {
     return async (dispatch) => {
         const toastId = toast.loading("Loading...");
         dispatch(setLoading(true));
+        let res=null;
         try {
             const { email, password } = data;
-            const res = await axios.post(Login, { email, password });
+            res = await axios.post(Login, { email, password });
             toast.success(res.data.message);
+            localStorage.setItem("user", JSON.stringify(res.data.data.user));
+            localStorage.setItem("token", JSON.stringify(res.data.data.token));
             dispatch(setToken(res.data.data.token));
-            dispatch(setUser(res.data.data.user.userName));
+            dispatch(setUser(res.data.data.user));
             navigate('/');
         } catch (error) {
             toast.error(error.response?.data?.message || error.message);
@@ -76,6 +79,7 @@ export const login = (data, navigate) => {
         }
         dispatch(setLoading(false));
         toast.dismiss(toastId);
+        return res?.data?.data?.token;
     }
 }
 export const logout = (navigate) => {
@@ -84,7 +88,6 @@ export const logout = (navigate) => {
         dispatch(setLoading(true));
         try {
             const res = await axios.get(Logout);
-            console.log(res);
             if (!res.data.success) {
                 toast.error(res.data.message);
             }
@@ -99,5 +102,27 @@ export const logout = (navigate) => {
 
         dispatch(setLoading(false));
         toast.dismiss(toastId);
+    }
+}
+
+export const fetchUsers = async () => {
+    try {
+        const toastId = toast.loading("Loading...");
+        const res = await axios.get(FetchUsers);
+        toast.dismiss(toastId);
+        return res.data.data;
+    } catch (error) {
+        console.log("Api Error in fetching users...", error);
+        toast.error(error?.response?.data?.message || error.message);
+    }
+}
+
+export const isAdmin = async () => {
+    try {
+        const res = await axios.get(IsAdmin);
+        return res.data.data;
+    } catch (error) {
+        // console.log("Api Error in fetching checking Admin...", error);
+        // toast.error(error?.response?.data?.message || error.message)
     }
 }

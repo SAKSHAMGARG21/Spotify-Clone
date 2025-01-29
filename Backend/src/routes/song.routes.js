@@ -21,7 +21,7 @@ router.route("/getfeaturesongs").get(getFeaturedSongs);
 router.route("/getsongsbyid/:songId").get(getSongById);
 router.route("/gettopSongs").get(getTopRatedSongs);
 router.route("/getsongsbyyear").post(getSongsByYear);
-router.route("/getalbum").get(getAlbum);
+router.route("/getalbum").post(getAlbum);
 
 router.route("/deletesongbyid/:songId").delete(deleteSongById);
 router.route("/deletesongsByIds").delete(deleteSongsByIds);

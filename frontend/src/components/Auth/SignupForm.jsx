@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Header from "../common/Header";
+import './scrollbar.css'
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -33,12 +34,11 @@ function SignupForm() {
         dispatch(sendOtp(email, navigate));
     };
     return (
-        <div className="h-screen bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364]">
-            <Topbar />
-
+        <div className="h-screen hide-scrollbar bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364]">
+            <Header />
             <div className="w-[25rem] min-w-[20rem] max-w-[25rem] my-8 mx-auto">
                 <div className="">
-                    <h1 className="font-bold text-left my-2">
+                    <h1 className="font-bold text-white text-left my-2">
                         Sign up to start listening
                     </h1>
                     <form

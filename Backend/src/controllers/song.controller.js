@@ -63,12 +63,12 @@ export const getFeaturedSongs = asyncHandler(async (req, res) => {
         },
     ]);
 
-    if (!songs){
+    if (!songs) {
         throw new ApiError(404, "Error in getting songs");
     }
 
     return res.status(200).json(
-        new ApiResponse(200,songs,"Songs fetched successfully")
+        new ApiResponse(200, songs, "Songs fetched successfully")
     )
 });
 
@@ -93,8 +93,19 @@ export const getSongById = asyncHandler(async (req, res) => {
 })
 
 export const getTopRatedSongs = asyncHandler(async (req, res) => {
-    const topRatedSongs = await Song.find({ rating: { $gt: 4.5 } });
-    
+    const topRatedSongs = await Song.aggregate([
+        {
+            $sample:{size:8},
+        },{
+            $project:{
+                _id:1,
+                songName:1,
+                songFile:1,
+                songImg:1,
+                artist:1,
+            }
+        }
+    ]);
     return res.status(200).json(
         new ApiResponse(200, topRatedSongs, "Top rated songs fetched successfully")
     )
@@ -119,7 +130,6 @@ export const getAlbum = asyncHandler(async (req, res) => {
     }
 
     const albumSongs = await Song.find({ artist });
-    console.log(albumSongs);
 
     if (!albumSongs) {
         throw new ApiError(404, "Artist songs not found");
@@ -143,12 +153,12 @@ export const deleteSongById = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Error in deleting song");
     }
 
-    if (song.albumId){
+    if (song.albumId) {
         await Album.findByIdAndUpdate(song.albumId, {
-            $pull:{
-                songs:song._id
+            $pull: {
+                songs: song._id
             }
-        }, {new :true})
+        }, { new: true })
     }
 
     await Song.findByIdAndDelete(songId);
@@ -173,7 +183,7 @@ export const deleteSongById = asyncHandler(async (req, res) => {
     // }
 
     return res.status(200).json(
-        new ApiResponse(200,song,"Song deleted Successfully")
+        new ApiResponse(200, song, "Song deleted Successfully")
     )
 })
 

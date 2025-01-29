@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import Header from "../common/Header";
+import './scrollbar.css'
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../services/operations/authApi";
 import GoogleLogin from "./GoogleLogin";
-import Topbar from "../Topbar";
+import { useCookies } from "react-cookie";
 function LoginForm() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const [cookie, setCookie] = useCookies(["token"]);
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         email: "",
@@ -26,14 +28,21 @@ function LoginForm() {
     const handleOnSubmit = (e) => {
         e.preventDefault();
         dispatch(login(formData, navigate));
+        // const loginUser = async()=>{
+        //     const res =await dispatch(login(formData, navigate));
+        //     const date = new Date();
+        //     date.setDate(date.getDate() + 30);
+        //     setCookie("token", res, { path: '/', expires: date });
+        // }
+        // loginUser();
     };
     return (
         <div>
-            <div className="h-screen bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364]">
-                <Topbar />
+            <div className="h-screen hide-scrollbar bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364]">
+                <Header />
                 <div className="w-[25rem] min-w-[20rem] max-w-[25rem] my-8 mx-auto">
                     <div className="">
-                        <h1 className="font-bold text-left my-2">
+                        <h1 className="font-bold text-white text-left my-2">
                             Login To Your Account
                         </h1>
                         <form

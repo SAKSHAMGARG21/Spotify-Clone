@@ -60,7 +60,6 @@ export const getAllAlbums = asyncHandler(async (req, res) => {
 
 export const getAlbumById = asyncHandler(async (req, res) => {
     const { albumId } = req.params;
-
     const album = await Album.findById(albumId).populate("songs");
 
     if (!album) {

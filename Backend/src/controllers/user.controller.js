@@ -7,6 +7,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { createTokenforUser } from "../utils/generateToken.js";
 import { oauth2client } from "../utils/GoogleConfig.js";
 import axios from "axios";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const googleLogin = asyncHandler(async (req, res) => {
@@ -171,8 +172,7 @@ export const login = asyncHandler(async (req, res) => {
         throw new ApiError(404, "User Not Found")
     }
 
-    const validPass = user.isPasswordCorrect(password);
-
+    const validPass = await user.isPasswordCorrect(password);
     if (!validPass) {
         throw new ApiError(404, "Password is not correct");
     }
@@ -244,7 +244,17 @@ export const refreshNewToken = asyncHandler(async (req, res) => {
         .json(
             new ApiResponse(200, { user, token }, "new token generated successfully")
         )
-
 })
 
+export const getAllUsers = asyncHandler(async (req, res) => {
+    const users = await User.find({});
+    return res.status(200).json(
+        new ApiResponse(200, users, "All Users fetched successfully")
+    )
+})
 
+export const isAdmin = asyncHandler(async (req, res) => {
+    return res.status(200).json(
+        new ApiResponse(200, true, "Yes")
+    )
+})
