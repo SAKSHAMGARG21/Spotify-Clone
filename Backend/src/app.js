@@ -23,6 +23,10 @@ import songRouter from "./routes/song.routes.js"
 import playlistRouter from "./routes/playlist.routes.js"
 import albumRouter from "./routes/album.routes.js"
 
+app.get("/",(req,res)=>{
+    res.send("Your Spotify app is working properly");
+})
+
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/song", songRouter);
 app.use("/api/v1/playlist", playlistRouter);

@@ -49,12 +49,12 @@ function App() {
   return (
     <div>
       <Routes>
-        {/* <Route path='/home' element={
+        <Route path='/' element={
           <OpenRoute>
             <Home />
           </OpenRoute>
         }>
-        </Route> */}
+        </Route>
         <Route path='/login' element={
           <OpenRoute>
             <GoogleAuthWrapper>
