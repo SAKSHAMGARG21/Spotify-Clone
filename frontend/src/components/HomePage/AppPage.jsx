@@ -35,7 +35,8 @@ function AppPage() {
   }, [gettopRatedSongs, getSongByYear]);
 
   useEffect(() => {
-    if (TopSongs.length > 0 && YearSongs.length > 0) {
+    console.log(TopSongs);
+    if (TopSongs?.length > 0 && YearSongs?.length > 0) {
       const allSongs = [...TopSongs, ...YearSongs];
       initializeQueue(allSongs);
     }
