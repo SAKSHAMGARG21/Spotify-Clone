@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useParams } from 'react-router-dom'
 import { fetchAlbumById } from '@/services/operations/albumApi';
-import { Clock, Play } from 'lucide-react';
+import { Clock, Pause, Play } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { usePlayerStore } from '@/services/operations/usePlayerStore';
 function AlbumPage() {
@@ -11,7 +11,7 @@ function AlbumPage() {
     const [releaseYear, setReleaseYaer] = useState();
     const [songDuration, setDuration] = useState();
     const { currentSong, isPlaying, currentIndex } = useSelector((state) => state.album);
-    const {playAlbum,togglePlay}= usePlayerStore();
+    const { playAlbum, togglePlay } = usePlayerStore();
 
 
     const getSongDuration = async (songUrl) => {
@@ -43,14 +43,13 @@ function AlbumPage() {
         playAlbum(currAlbum?.songs, index);
     }
 
-    const handleAlbumToggle = ()=>{
+    const handleAlbumToggle = () => {
         if (!currAlbum) return;
-        const isCurruntSongPlaying= currAlbum?.songs.some(song => song._id === currentSong?._id);
+        const isCurruntSongPlaying = currAlbum?.songs.some(song => song._id === currentSong?._id);
         if (isCurruntSongPlaying) togglePlay();
-        else{
-            playAlbum(currAlbum?.songs,0);
+        else {
+            playAlbum(currAlbum?.songs, 0);
         }
-
     }
 
     return (
@@ -82,9 +81,15 @@ function AlbumPage() {
                         {/* Play Button  */}
                         <div className='px-6 pb-4 flex items-center gap-6'>
                             <button size='icon'
-                            onClick={()=>handleAlbumToggle()} 
-                            className='h-[3.6rem] w-[3.9rem] text-center rounded-[100%] bg-green-500 hover:bg-green-400'>
-                                <Play className='h-7 w-7 text-black' />
+                                onClick={() => handleAlbumToggle()}
+                                className='h-[3.6rem] w-[3.9rem] text-center rounded-[100%] bg-green-500 hover:bg-green-400'>
+                                {
+                                    isPlaying && currAlbum?.songs.some((song) => song?._id === currentSong?._id) ? (
+                                        <Pause className='h-7 w-7 text-black' />
+                                    ) : (
+                                        <Play className='h-7 w-7 text-black' />
+                                    )
+                                }
                             </button>
                         </div>
 

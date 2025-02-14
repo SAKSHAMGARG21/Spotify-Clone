@@ -1,3 +1,4 @@
+import { Message } from "../modules/message.model.js";
 import { Otp } from "../modules/otp.model.js";
 import { User } from "../modules/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -33,7 +34,7 @@ export const googleLogin = asyncHandler(async (req, res) => {
 
     const token = await createTokenforUser(user._id);
     return res.status(200)
-        .cookie('token', token, { httpOnly: true, sameSite: "none", secure: true, maxAge: 2 * 60 * 60 * 1000 })
+        .cookie('token', token, { httpOnly: true, sameSite: "none", secure: true, maxAge: 24 * 60 * 60 * 1000 })
         .json(
             new ApiResponse(200, { user: user, token: token }, "Successfully login")
         )
@@ -189,7 +190,7 @@ export const login = asyncHandler(async (req, res) => {
         httpOnly: true,
         sameSite: "Lax",
         secure: false,
-        maxAge: 2 * 60 * 60 * 1000
+        maxAge: 24 * 60 * 60 * 1000
     }
 
     return res.status(200)
@@ -256,5 +257,20 @@ export const getAllUsers = asyncHandler(async (req, res) => {
 export const isAdmin = asyncHandler(async (req, res) => {
     return res.status(200).json(
         new ApiResponse(200, true, "Yes")
+    )
+})
+
+export const getMessages = asyncHandler(async (req, res) => {
+    const myId = req.user;
+    const { userId } = req.params;
+    const messages= await Message.find({
+        $or:[
+            {senderId:userId,receiverId:String(myId._id)},
+            {senderId:String(myId._id),receiverId:userId}
+        ]
+    }).sort({createdAt:1});
+
+    return res.status(200).json(
+        new ApiResponse(200,messages,"message fetched successfully")
     )
 })

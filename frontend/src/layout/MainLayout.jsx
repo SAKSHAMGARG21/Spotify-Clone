@@ -8,6 +8,7 @@ import {
 import LeftSideBar from '@/components/HomePage/LeftSideBar';
 import FriendsActivity from '@/components/HomePage/FriendsActivity';
 import AudioPlayer from '@/components/common/AudioPlayer';
+import PlayBackControls from '@/components/common/PlayBackControls';
 
 
 function MainLayout() {
@@ -34,6 +35,7 @@ function MainLayout() {
                 </ResizablePanel>
             </ResizablePanelGroup>
 
+            <PlayBackControls />
         </div>
     )
 }

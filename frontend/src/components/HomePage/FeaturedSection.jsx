@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import FeaturedGridSkeleton from '../skeletons/FeaturedGridSkeleton';
 import { getfeaturedSongs } from '@/services/operations/songApi';
+import PlayButton from '../common/PlayButton';
 
 function FeaturedSection() {
     const [featuredSongs, setFeaturedSongs] = useState([]);
     const [isLoading, setLoading] = useState();
-    const [error, setError] = useState();
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const getFeaturedSongsdata = async () => {
+            setLoading(true);
             const res = await getfeaturedSongs();
+            setLoading(false);
             setFeaturedSongs(res);
         }
         getFeaturedSongsdata();
@@ -35,7 +38,7 @@ function FeaturedSection() {
                         <p className='font-medium truncate'>{song.songName}</p>
                         <p className='text-sm text-zinc-400 truncate'>{song.artist}</p>
                     </div>
-                    {/* <PlayButton song={song} /> */}
+                    <PlayButton song={song} />
                 </div>
             ))}
         </div>

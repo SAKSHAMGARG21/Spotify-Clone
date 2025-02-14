@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
-import { getAllUsers, googleLogin, isAdmin, login, logout, profileData, refreshNewToken, registerUser, sendOtp } from "../controllers/user.controller.js";
+import { getAllUsers, getMessages, googleLogin, isAdmin, login, logout, profileData, refreshNewToken, registerUser, sendOtp } from "../controllers/user.controller.js";
 import { mainAdmin, verifyJwt } from "../middleware/Auth.middleware.js";
 
 const router = Router();
@@ -12,6 +12,7 @@ router.route("/logout").get(verifyJwt, logout);
 router.route("/profile").get(verifyJwt, profileData);
 router.route("/checktoken").get(verifyJwt, refreshNewToken);
 router.route("/getusers").get(getAllUsers);
-router.route("/isadmin").get(verifyJwt, mainAdmin, isAdmin);
+// router.route("/isadmin").get(verifyJwt, mainAdmin, isAdmin);
+router.route("/getmessage/:userId").get(verifyJwt,getMessages);
 export default router;
 

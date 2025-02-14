@@ -1,4 +1,5 @@
 import Basedata from "../config/Basedata"
+
 export const authApis = {
     GoogleAuth: Basedata.BackendUrl + "/user/google?code=",
     SendOtp: Basedata.BackendUrl + "/user/sendotp",
@@ -8,7 +9,8 @@ export const authApis = {
     Profile: Basedata.BackendUrl + "/user/profile",
     CheckToken: Basedata.BackendUrl + "/user/checktoken",
     FetchUsers: Basedata.BackendUrl + "/user/getusers",
-    AdminRoute: Basedata.BackendUrl + "/user/admin"
+    AdminRoute: Basedata.BackendUrl + "/user/admin",
+    GetMessages:Basedata.BackendUrl + "/user/getmessage"
 }
 
 export const songApis = {

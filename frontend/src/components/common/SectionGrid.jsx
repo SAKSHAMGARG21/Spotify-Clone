@@ -1,5 +1,6 @@
 import React from 'react'
 import SectionGridSkeleton from '../skeletons/SectionGridSkeleton'
+import PlayButton from './PlayButton';
 
 function SectionGrid({ title, songs, isLoading }) {
 
@@ -28,7 +29,7 @@ function SectionGrid({ title, songs, isLoading }) {
 									group-hover:scale-105'
                 />
               </div>
-              {/* <PlayButton song={song} /> */}
+              <PlayButton song={song} />
             </div>
             <h3 className='font-medium mb-2 truncate'>{song.songName}</h3>
             <p className='text-sm text-zinc-400 truncate'>{song.artist}</p>

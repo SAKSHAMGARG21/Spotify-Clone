@@ -28,9 +28,7 @@ export const createSongs = async () => {
 
 export const getfeaturedSongs = async () => {
     try {
-        const toastId = toast.loading("Loading...");
         const res = await axios.get(FeaturedSongs);
-        toast.dismiss(toastId);
         return res.data.data;
     } catch (error) {
         console.log("Api error in fetching featuredsongs...", error);
@@ -51,7 +49,7 @@ export const gettopRatedSongs = async () => {
     try {
         const toastId = toast.loading("Loading...");
         const res = await axios.get(TopSongs);
-        console.log(res);
+        // console.log(res);
         toast.dismiss(toastId);
         return res.data.data;
     } catch (error) {
@@ -63,7 +61,7 @@ export const gettopRatedSongs = async () => {
 export const getSongByYear = async (year) => {
     try {
         const res = await axios.post(SongsByYear, {year});
-        console.log(res);
+        // console.log(res);
         return res.data.data;
     } catch (error) {
         console.log("Api error in Getting Song by year...", error);
@@ -74,7 +72,7 @@ export const getSongByYear = async (year) => {
 export const getAlbum = async (artist) => {
     try {
         const res = await axios.post(GetAlbum,{artist});
-        console.log(res);
+        // console.log(res);
         return res.data.data;
     } catch (error) {
         console.log("Api error in Getting Album...", error);

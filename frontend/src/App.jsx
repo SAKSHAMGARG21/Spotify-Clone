@@ -19,11 +19,12 @@ import MainLayout from './layout/MainLayout';
 import AppPage from './components/HomePage/AppPage';
 import AlbumPage from './components/HomePage/AlbumPage';
 import AdminPage from './pages/AdminPage';
-import {useCookies} from 'react-cookie';
+import { useCookies } from 'react-cookie';
+import { toast } from 'react-toastify';
+
 function App() {
   axios.defaults.withCredentials = true;
-  const dispatch = useDispatch();
-
+  // const dispatch = useDispatch();
   // const [cookie,setCookie]= useCookies(["token"]);
   // useEffect(()=>{
   //   console.log(cookie);
@@ -38,12 +39,13 @@ function App() {
   //     console.log("Error in checking user", error);
   //   }
   // }
-  // useEffect(() => {
-  //   const checkUser = async () => {
-  //     await UserExists();
-  //   }
-  //   checkUser();
-  // }, [])
+  useEffect(() => {
+    // const checkUser = async () => {
+    //   await UserExists();
+    // }
+    // checkUser();
+    toast.dismiss();
+  }, [])
   return (
     <div>
       <Routes>
@@ -74,11 +76,19 @@ function App() {
           </OpenRoute>
         }></Route>
         <Route element={<MainLayout />}>
-          <Route path='/' element={<AppPage />} />
-          <Route path='/chat' element={<ChatBox />} />
+          <Route path='/' element={
+            <PrivateRoute>
+              <AppPage />
+            </PrivateRoute>
+          } />
+          <Route path='/chat' element={
+            <PrivateRoute>
+              <ChatBox />
+            </PrivateRoute>
+          } />
           <Route path='/album/:albumId' element={<AlbumPage />} />
         </Route>
-        <Route path='/admin' element={<AdminPage />} />
+        {/* <Route path='/admin' element={<AdminPage />} /> */}
         <Route path='*' element={<Error></Error>}></Route>
       </Routes>
       {/* <Loader></Loader> */}

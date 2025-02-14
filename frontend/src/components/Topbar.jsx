@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { LayoutDashboardIcon, LogOut, Settings } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,6 +11,19 @@ function Topbar() {
   const handleLogout = () => {
     dispatch(logout(navigate));
   }
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownOpen && !event.target.closest('.dropdown')) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dropdownOpen]);
+
   return (
     <div className="bg-zinc-900 rounded-md p-[6px] flex justify-between items-center">
       <div className='flex gap-2 justify-center items-center'>
@@ -29,7 +42,7 @@ function Topbar() {
         }
         {
           user &&
-          <div className='relative'>
+          <div className='relative dropdown'>
             <img
               src={user.profileImage}
               alt={user.userName}

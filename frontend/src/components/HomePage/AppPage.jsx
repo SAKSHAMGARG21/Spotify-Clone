@@ -4,29 +4,40 @@ import FeaturedSection from './FeaturedSection'
 import { ScrollArea } from '../ui/scroll-area'
 import { getSongByYear, gettopRatedSongs } from '@/services/operations/songApi';
 import SectionGrid from '../common/SectionGrid';
+import { usePlayerStore } from '@/services/operations/usePlayerStore';
 
 function AppPage() {
   const [TopSongs, setTopRatedSongs] = useState([]);
   const [YearSongs, setYearSongs] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const { initializeQueue } = usePlayerStore();
   const getTopRatedSongsData = async () => {
     setLoading(true);
     const songdata = await gettopRatedSongs();
-    setLoading(false);
     setTopRatedSongs(songdata);
+    setLoading(false);
   };
+  
   const getSongsByYearData = async () => {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     setLoading(true);
     const songData = await getSongByYear(year);
-    setLoading(false);
     setYearSongs(songData);
+    setLoading(false);
   }
   useEffect(() => {
     getTopRatedSongsData();
     getSongsByYearData();
   }, [gettopRatedSongs, getSongByYear]);
+
+  useEffect(() => {
+    if (TopSongs.length > 0 && YearSongs.length > 0) {
+      const allSongs = [...TopSongs, ...YearSongs];
+      initializeQueue(allSongs);
+    }
+  }, [TopSongs, YearSongs]);
+
   return (
     <main className='rounded-md overflow-hidden h-full bg-gradient-to-b from-gray-900 via-gray-800 to-black'>
       <Topbar></Topbar>

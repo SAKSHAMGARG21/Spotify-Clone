@@ -21,6 +21,7 @@ export const googleAuth = async (code) => {
 
 export const sendOtp = (email, navigate) => {
     return async (dispatch) => {
+        toast.dismiss();
         const toastId = toast.loading("Loading...");
         dispatch(setLoading(true));
         try {
@@ -41,6 +42,7 @@ export const sendOtp = (email, navigate) => {
 
 export const register = (formData, navigate) => {
     return async (dispatch) => {
+        toast.dismiss();
         const toastId = toast.loading("Loading...");
         dispatch(setLoading(true));
         try {
@@ -61,6 +63,7 @@ export const register = (formData, navigate) => {
 
 export const login = (data, navigate) => {
     return async (dispatch) => {
+        toast.dismiss();
         const toastId = toast.loading("Loading...");
         dispatch(setLoading(true));
         let res=null;
@@ -84,6 +87,7 @@ export const login = (data, navigate) => {
 }
 export const logout = (navigate) => {
     return async (dispatch) => {
+        toast.dismiss();
         const toastId = toast.loading("Loading...");
         dispatch(setLoading(true));
         try {
@@ -92,6 +96,8 @@ export const logout = (navigate) => {
                 toast.error(res.data.message);
             }
             toast.success(res.data.message);
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
             dispatch(setToken(null));
             dispatch(setUser(null));
             navigate('/login');
