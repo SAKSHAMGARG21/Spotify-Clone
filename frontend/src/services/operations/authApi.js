@@ -91,15 +91,15 @@ export const logout = (navigate) => {
         const toastId = toast.loading("Loading...");
         dispatch(setLoading(true));
         try {
-            const res = await axios.get(Logout);
-            if (!res.data.success) {
-                toast.error(res.data.message);
-            }
-            toast.success(res.data.message);
+            // const res = await axios.get(Logout);
+            // if (!res.data.success) {
+                // toast.error(res.data.message);
+            // }
             localStorage.removeItem("user");
             localStorage.removeItem("token");
             dispatch(setToken(null));
             dispatch(setUser(null));
+            toast.success("Logout successfully");
             navigate('/login');
         } catch (error) {
             console.log("Error in logout user...", error);

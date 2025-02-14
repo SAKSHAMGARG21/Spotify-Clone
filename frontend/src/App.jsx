@@ -49,12 +49,12 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path='/' element={
+        {/* <Route path='/' element={
           <OpenRoute>
             <Home />
           </OpenRoute>
         }>
-        </Route>
+        </Route> */}
         <Route path='/login' element={
           <OpenRoute>
             <GoogleAuthWrapper>
@@ -77,9 +77,9 @@ function App() {
         }></Route>
         <Route element={<MainLayout />}>
           <Route path='/' element={
-            <PrivateRoute>
+            // <PrivateRoute>
               <AppPage />
-            </PrivateRoute>
+            // </PrivateRoute>
           } />
           <Route path='/chat' element={
             <PrivateRoute>
@@ -91,7 +91,6 @@ function App() {
         {/* <Route path='/admin' element={<AdminPage />} /> */}
         <Route path='*' element={<Error></Error>}></Route>
       </Routes>
-      {/* <Loader></Loader> */}
     </div>
   )
 }

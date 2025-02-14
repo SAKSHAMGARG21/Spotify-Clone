@@ -4,8 +4,11 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Link } from 'react-router-dom';
 import PlaylistSkeleton from '../skeletons/PlaylistSkeleton';
 import { fetchAlbums } from '@/services/operations/albumApi';
+import { useSelector } from 'react-redux';
+import LoginToContinue from '../common/LoginToContinue';
 
 function LeftSideBar() {
+    const { user, token } = useSelector(state => state.auth);
     const [isLoading, setLoading] = useState(false);
     const [albumData, setAlbumData] = useState([]);
     useEffect(() => {
@@ -45,39 +48,25 @@ function LeftSideBar() {
                             <Plus />
                         </div>
                     </div>
-
-                    {/* <div className='overflow-y-scroll scroll-smooth bg-slate-600 h-full w-full'>
-                        <div className='h-12'>
-                            songs list
-                        </div>
-                        <div className='h-12'>1</div>
-                        <div className='h-12'>2</div>
-                        <div className='h-12'>3</div>
-                        <div className='h-12'>4</div>
-                        <div className='h-12'>5</div>
-                        <div className='h-12'>6</div>
-                        <div className='h-12'>7</div>
-                        <div className='h-12'>8</div>
-                        <div className='h-12'>9</div>
-                        <div className='h-12'>10</div>
-                    </div> */}
                 </div>
 
                 <ScrollArea className='h-[calc(100vh-250px)] rounded-md'>
                     <div>
                         {
-                            isLoading ? (<PlaylistSkeleton />) : (
-                                albumData.map((album) => (
-                                    <Link to={`/album/${album._id}`} key={album._id} 
-                                    className='p-2 hover:bg-zinc-800 rounded-md flex text-left items-center gap-3 cursor-pointer'>
-                                        <img src={album.imageUrl} alt={album.title} className=' size-12 rounded-md flex-shrink-0 object-cover' />
-                                        <div className='flex-1 min-w-0 hidden md:block'> 
-                                            <p className='font-medium truncate'>{album.title}</p>
-                                            <p className='text-sm text-zinc-400 truncate'>{album.artist}</p>
-                                        </div>
-                                    </Link>
-                                ))
-                            )
+                            user || token ? (
+                                isLoading ? (<PlaylistSkeleton />) : (
+                                    albumData.map((album) => (
+                                        <Link to={`/album/${album._id}`} key={album._id}
+                                            className='p-2 hover:bg-zinc-800 rounded-md flex text-left items-center gap-3 cursor-pointer'>
+                                            <img src={album.imageUrl} alt={album.title} className=' size-12 rounded-md flex-shrink-0 object-cover' />
+                                            <div className='flex-1 min-w-0 hidden md:block'>
+                                                <p className='font-medium truncate'>{album.title}</p>
+                                                <p className='text-sm text-zinc-400 truncate'>{album.artist}</p>
+                                            </div>
+                                        </Link>
+                                    ))
+                                )
+                            ) : (<LoginToContinue />)
                         }
                     </div>
                 </ScrollArea>

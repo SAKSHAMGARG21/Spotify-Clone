@@ -5,8 +5,11 @@ import { ScrollArea } from '../ui/scroll-area'
 import { getSongByYear, gettopRatedSongs } from '@/services/operations/songApi';
 import SectionGrid from '../common/SectionGrid';
 import { usePlayerStore } from '@/services/operations/usePlayerStore';
+import { useSelector } from 'react-redux';
+import LoginToContinue from '../common/LoginToContinue';
 
 function AppPage() {
+  const { user,token } = useSelector(state => state.auth);
   const [TopSongs, setTopRatedSongs] = useState([]);
   const [YearSongs, setYearSongs] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -17,7 +20,7 @@ function AppPage() {
     setTopRatedSongs(songdata);
     setLoading(false);
   };
-  
+
   const getSongsByYearData = async () => {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
@@ -43,13 +46,20 @@ function AppPage() {
       <Topbar></Topbar>
       <ScrollArea className='h-[calc(100vh-180px)]'>
         <div className='p-4 sm:p-6'>
-          <h1 className='text-2xl text-left sm:text-3xl font-bold mb-6 text-white'>Good afternoon</h1>
-          <FeaturedSection />
-
-          <div className='space-y-8'>
-            <SectionGrid title='Made For You' songs={TopSongs} isLoading={isLoading} />
-            <SectionGrid title='Trending' songs={YearSongs} isLoading={isLoading} />
-          </div>
+          {
+            user || token  ? (
+              <div>
+                <h1 className='text-2xl text-left sm:text-3xl font-bold mb-6 text-white'>Good afternoon</h1>
+                <FeaturedSection />
+                <div className='space-y-8'>
+                  <SectionGrid title='Made For You' songs={TopSongs} isLoading={isLoading} />
+                  <SectionGrid title='Trending' songs={YearSongs} isLoading={isLoading} />
+                </div>
+              </div>
+            ) : (
+              <LoginToContinue />
+            )
+          }
         </div>
       </ScrollArea>
     </main>

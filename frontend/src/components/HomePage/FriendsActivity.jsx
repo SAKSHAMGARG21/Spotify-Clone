@@ -10,10 +10,10 @@ function FriendsActivity() {
     const [users, setUsers] = useState([]);
     const isPlaying = false;
     const fetchData = async () => {
-        // if (user) {
-        const res = await fetchUsers();
-        setUsers(res);
-        // };
+        if (user) {
+            const res = await fetchUsers();
+            setUsers(res);
+        };
     }
     useEffect(() => {
         fetchData();
@@ -26,12 +26,12 @@ function FriendsActivity() {
                 </div>
             </div>
 
-            {/* {!user && <LoginPrompt />} */}
+            {!user && <LoginPrompt />}
 
             <ScrollArea className='flex-1'>
                 <div className='p-4 space-y-4'>
                     {
-                        users.map((user) => (
+                        users?.map((user) => (
                             <div key={user?._id} className='cursor-pointer hover:bg-zinc-800/50 p-3 rounded-md transition-colors group'>
                                 <Link to='/chat'>
                                     <div className='flex item-start items-center gap-3'>
