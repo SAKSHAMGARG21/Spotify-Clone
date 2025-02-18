@@ -11,8 +11,8 @@ router.route("/login").post(login);
 router.route("/logout").get(verifyJwt, logout);
 router.route("/profile").get(verifyJwt, profileData);
 router.route("/checktoken").get(verifyJwt, refreshNewToken);
-router.route("/getusers").get(getAllUsers);
-// router.route("/isadmin").get(verifyJwt, mainAdmin, isAdmin);
+router.route("/getusers").get(verifyJwt,getAllUsers);
 router.route("/getmessage/:userId").get(verifyJwt,getMessages);
+// router.route("/isadmin").get(verifyJwt, mainAdmin, isAdmin);
 export default router;
 

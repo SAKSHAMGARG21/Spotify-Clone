@@ -70,7 +70,7 @@ userSchema.methods.generateToken = function () {
         },
         process.env.TOKEN_SECRET,
         {
-            expiresIn: process.env.TOKEN_EXPIRY
+            expiresIn: process.env.TOKEN_EXPIRY || '1d'
         }
     )
 }

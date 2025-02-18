@@ -1,20 +1,23 @@
 import { useDispatch, useSelector } from "react-redux";
 import { authApis } from "../apis";
-import { setError, setisConnected, setisLoading, setMessages, setonlineUsers, setSelectedUser, setUserActivities, setUsers} from "@/slices/chatSlice";
+import { setError, setisConnected, setisLoading, setMessages, setonlineUsers, setSelectedUser, setSocket, setUserActivities, setUsers } from "@/slices/chatSlice";
 import axios from "axios";
 import { setLoading } from "@/slices/authSlice";
-
-const { GetMessages } = authApis;
+import { useEffect } from "react";
+import Basedata from "@/config/Basedata";
 import { io } from "socket.io-client";
 
-const baseURL = "http://localhost:5000";
+const { GetMessages } = authApis;
+
+const baseURL = Basedata.Baseurl;
 const socket = io(baseURL, {
     autoConnect: false,
-    withCredentials: true
+    withCredentials: true,
 });
 export const useChatStore = () => {
+
     const dispatch = useDispatch();
-    const { isConnected, onlineUsers, userActivities, messages } = useSelector(state => state.chat);
+    const { selectedUser, isConnected, onlineUsers, userActivities, messages } = useSelector((state) => state.chat);
     const { FetchUsers } = authApis;
 
     const setSelectedUserStore = (user) => {
@@ -46,28 +49,33 @@ export const useChatStore = () => {
             socket.on("activities", (activities) => {
                 dispatch(setUserActivities(Object.fromEntries(activities)));
             });
+
             socket.on("user_connected", (userId) => {
                 dispatch(setonlineUsers(Array.from(new Set([...onlineUsers, userId]))));
-            })
+            });
+
             socket.on("user_disconnected", (userId) => {
                 const newOnlineUsers = new Set(onlineUsers);
                 newOnlineUsers.delete(userId);
                 dispatch(setonlineUsers(Array.from(newOnlineUsers)));
-            })
-            socket.on("receiver_message", (message) => {
+            });
+
+            socket.on("receive_message", (message) => {
+                // console.log(messages);
                 dispatch(setMessages([...messages, message]));
-            })
+            });
 
             socket.on("message_sent", (message) => {
+                // console.log(messages);
                 dispatch(setMessages([...messages, message]));
-            })
-            
+            });
+
             socket.on("activity_updated", ({ userId, activity }) => {
                 const newActivities = new Map(userActivities);
                 console.log(userActivities);
                 newActivities.set(userId, activity)
                 dispatch(setUserActivities(newActivities));
-            })
+            });
 
             dispatch(setisConnected(true));
         }
@@ -90,13 +98,14 @@ export const useChatStore = () => {
             dispatch(setLoading(true));
             dispatch(setError(null));
             const res = await axios.get(`${GetMessages}/${userId}`);
-            console.log(res);
+            // console.log(res);
             dispatch(setLoading(false));
             dispatch(setMessages(res.data.data));
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
         }
     }
+
     return {
         setSelectedUserStore,
         fetchUsers,

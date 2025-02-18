@@ -24,7 +24,7 @@ export const initializeSocket = (server) => {
             // broadcast to all connected sockets that user is just logged in
             io.emit("user_connected", userId);
 
-            io.emit("users_online", Array.from(userSockets.keys()));
+            socket.emit("users_online", Array.from(userSockets.keys()));
 
             io.emit("activities", Array.from(userActivities.entries()));
         })
@@ -48,7 +48,7 @@ export const initializeSocket = (server) => {
                 // send to user to realtime ,if they are online
                 const reciverSocketId = userSockets.get(receiverId);
                 if (reciverSocketId) {
-                    io.to(reciverSocketId).emit("receiver_message", message);
+                    io.to(reciverSocketId).emit("receive_message", message);
                 }
                 io.emit("message_sent", message);
             } catch (error) {

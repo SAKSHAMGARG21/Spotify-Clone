@@ -7,8 +7,11 @@ import { Link } from 'react-router-dom';
 
 function FriendsActivity() {
     const { user } = useSelector((state) => state.auth);
+    const { onlineUsers ,userActivities} = useSelector((state) => state.chat);
     const [users, setUsers] = useState([]);
-    const isPlaying = false;
+    const [loginuser,setLoginUser]=useState('');
+
+    const onlineUsersSet = new Set(onlineUsers);
     const fetchData = async () => {
         if (user) {
             const res = await fetchUsers();
@@ -16,6 +19,8 @@ function FriendsActivity() {
         };
     }
     useEffect(() => {
+        console.log(userActivities);
+        setLoginUser(user._id);
         fetchData();
     }, [fetchUsers, user]);
     return (
@@ -31,37 +36,49 @@ function FriendsActivity() {
             <ScrollArea className='flex-1'>
                 <div className='p-4 space-y-4'>
                     {
-                        users?.map((user) => (
-                            <div key={user?._id} className='cursor-pointer hover:bg-zinc-800/50 p-3 rounded-md transition-colors group'>
-                                <Link to='/chat'>
-                                    <div className='flex item-start items-center gap-3'>
-                                        <div className='relative'>
-                                            <img src={user.profileImage} alt={user.userName} className='border-2 border-zinc-700 size-12 p-[1px] rounded-full' />
-                                            <div className='absolute bottom-1 right-1 size-[8px] rounded-full bg-zinc-500'
-                                                aria-hidden='true' />
-                                        </div>
-
-                                        <div className='flex flex-col text-left min-w-0'>
-                                            <div className='flex items-center gap-2'>
-                                                <span className='font-semibold text-sm text-white'>{user.fullName}</span>
-                                                {isPlaying && <Music className='size-3 text-em-400 shrink-0' />}
+                        users?.map((user) => {
+                            const activity = userActivities[loginuser];
+                            const isPlaying= activity && activity !== 'Idle';
+                            return (
+                                <div key={user?._id} className='cursor-pointer hover:bg-zinc-800/50 p-3 rounded-md transition-colors group'>
+                                    <Link to='/chat'>
+                                        <div className='flex item-start items-center gap-3'>
+                                            <div className='relative'>
+                                                <img src={user.profileImage} alt={user.userName} className='border-2 border-zinc-700 size-12 p-[1px] rounded-full' />
+                                                <div className='absolute bottom-1 right-1 size-[8px] rounded-full bg-zinc-500'
+                                                    aria-hidden='true' />
+                                                <div
+                                                    className={`absolute bottom-0 right-0 h-3 w-3 rounded-full ring-2 ring-zinc-900
+                                                ${onlineUsersSet.has(user._id) ? "bg-green-500" : "bg-zinc-500"}`}
+                                                />
                                             </div>
-                                            {
-                                                isPlaying ? (
-                                                    <div>
-                                                        <div className='text-[12px] text-zinc-300 font-medium truncate'>Cardigan</div>
-                                                        <div className='text-[10px] text-zinc-400 truncate'>Artist</div>
-                                                    </div>) : (
-                                                    <div className='text-xs text-zinc-400'>
-                                                        Idle
-                                                    </div>
-                                                )
-                                            }
+
+                                            <div className='flex flex-col text-left min-w-0'>
+                                                <div className='flex items-center gap-2'>
+                                                    <span className='font-semibold text-sm text-white'>{user.userName}</span>
+                                                    {isPlaying && <Music className='size-3 text-emerald-400 shrink-0' />}
+                                                </div>
+                                                {
+                                                    isPlaying ? (
+                                                        <div className='mt-1'>
+                                                            <div className='text-[12px] text-zinc-300 font-medium truncate'>
+                                                               {activity.replace("Playing ","").split(" by ")[0]}
+                                                            </div>
+                                                            <div className='text-[10px] text-zinc-400 truncate'>
+                                                                {activity.split(" by ")[1]}
+                                                            </div>
+                                                        </div>) : (
+                                                        <div className='text-xs text-zinc-400'>
+                                                            Idle
+                                                        </div>
+                                                    )
+                                                }
+                                            </div>
                                         </div>
-                                    </div>
-                                </Link>
-                            </div>
-                        ))
+                                    </Link>
+                                </div>
+                            )
+                        })
                     }
                 </div>
             </ScrollArea>

@@ -43,7 +43,7 @@ function SignupForm() {
                     </h1>
                     <form
                         onSubmit={handleOnSubmit}
-                        className="flex w-full flex-col gap-y-4 items-start"
+                        className="flex w-full flex-col gap-y-4 items-start text-white"
                     >
                         <label className="w-full">
                             <p className="font-medium my-1 text-left">

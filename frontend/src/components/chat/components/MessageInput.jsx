@@ -1,6 +1,5 @@
 import { Input } from "@/components/ui/input";
 import { useChatStore } from "@/services/operations/useChatStore";
-import { setMessages } from "@/slices/chatSlice";
 import { Send } from "lucide-react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,11 +9,11 @@ const MessageInput = () => {
 	const dispatch= useDispatch();
 	const [newMessage, setNewMessage] = useState("");
 	const { user } = useSelector(state => state.auth);
-	const {selectedUser,messages }= useSelector(state=> state.chat);
-	const { sendMessage } = useChatStore();
+	const { selectedUser } = useSelector(state => state.chat);
+	const {sendMessage} = useChatStore();
+
 	const handleSend = () => {
 		if (!selectedUser || !user || !newMessage) return;
-		dispatch(setMessages([...messages]));
 		sendMessage(selectedUser._id, user._id, newMessage.trim());
 		setNewMessage("");
 	};

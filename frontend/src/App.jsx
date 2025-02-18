@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import { Route, Routes } from 'react-router-dom';
 // import Loader from "./components/common/Loader"
-import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Error from "./pages/Error"
@@ -49,12 +48,6 @@ function App() {
   return (
     <div>
       <Routes>
-        {/* <Route path='/' element={
-          <OpenRoute>
-            <Home />
-          </OpenRoute>
-        }>
-        </Route> */}
         <Route path='/login' element={
           <OpenRoute>
             <GoogleAuthWrapper>
@@ -77,9 +70,7 @@ function App() {
         }></Route>
         <Route element={<MainLayout />}>
           <Route path='/' element={
-            // <PrivateRoute>
               <AppPage />
-            // </PrivateRoute>
           } />
           <Route path='/chat' element={
             <PrivateRoute>

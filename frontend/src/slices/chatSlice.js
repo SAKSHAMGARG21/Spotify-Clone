@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 const initialState = {
     users: [],
     isLoading: false,
     error: null,
+    socket:null,
     isConnected: false,
     onlineUsers: [], // Store as an array
     userActivities: {}, // Store as a plain object
@@ -27,6 +27,9 @@ const chatSlice = createSlice({
         setisConnected: (state, action) => {
             state.isConnected = action.payload;
         },
+        setSocket:(state,action)=>{
+            state.socket= action.payload;
+        },
         setonlineUsers: (state, action) => {
             state.onlineUsers = action.payload;
         },
@@ -42,6 +45,6 @@ const chatSlice = createSlice({
     }
 });
 
-export const { setSelectedUser, setUsers, setisLoading, setisConnected, setError, setonlineUsers, setUserActivities, setMessages } = chatSlice.actions;
+export const { setSelectedUser,setSocket, setUsers, setisLoading, setisConnected, setError, setonlineUsers, setUserActivities, setMessages } = chatSlice.actions;
 
 export default chatSlice.reducer;

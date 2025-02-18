@@ -1,5 +1,5 @@
 import { useChatStore } from '@/services/operations/useChatStore'
-import React, { useEffect } from 'react'
+import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import { useSelector } from 'react-redux';
 import Topbar from '../Topbar';
 import UserList from './components/UserList';
@@ -18,12 +18,7 @@ const formatTime = (time) => {
   return `${formattedHours}:${formattedMinutes} ${ampm}`;
 };
 function ChatBox() {
-  const { setSelectedUserStore,
-    fetchUsers,
-    initSocket,
-    disconnectSocket,
-    sendMessage,
-    fetchMessages } = useChatStore();
+  const { fetchUsers, fetchMessages } = useChatStore();
   const { messages, selectedUser } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.auth);
 
@@ -32,16 +27,23 @@ function ChatBox() {
   }, [user]);
 
   useEffect(() => {
-    // console.log(selectedUser?._id);
+    if (scrollRef.current) {
+      setTimeout(() => {
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      }, 100);
+    }
+  }, [messages.length]);
+  
+  useEffect(() => {
     if (selectedUser) fetchMessages(selectedUser?._id);
-  }, [selectedUser]);
-  const scrollRef = React.useRef(null);
+  }, [selectedUser, messages]);
 
+  const scrollRef = useRef(null);
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages.length]);
 
   return (
     <main className='h-full rounded-lg bg-gradient-to-b from-zinc-800 to-zinc-900 overflow-hidden'>
@@ -57,7 +59,7 @@ function ChatBox() {
 
               {/* Messages */}
               <ScrollArea className='h-[calc(100vh-340px)] overflow-y-auto' ref={scrollRef}>
-                <div className='p-4 space-y-4'>
+                <div className='p-4 space-y-4 overflow-y-auto'>
                   {messages?.map((message) => (
                     <div
                       key={message._id}
@@ -69,7 +71,7 @@ function ChatBox() {
                       </div>
 
                       <div
-                        className={`rounded-lg p-3 max-w-[70%]
+                        className={`rounded-lg p-3 max-w-[70%] break-words
                           ${message.senderId === user?._id ? "bg-[#02cc1040]" : "bg-zinc-800"}
                         `}
                       >
@@ -83,7 +85,7 @@ function ChatBox() {
                 </div>
               </ScrollArea>
 
-              <MessageInput  />
+              <MessageInput />
             </>
           ) : (
             <NoConversationPlaceholder />

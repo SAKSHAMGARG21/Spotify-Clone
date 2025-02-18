@@ -67,7 +67,7 @@ export const sendOtp = asyncHandler(async (req, res) => {
 const verifyOtp = async (email, otp) => {
 
     const user = await Otp.find({ email }).sort({ createdAt: -1 }).limit(1);
-    console.log(user);
+    // console.log(user);
 
     if (!user) {
         throw new ApiError(404, "User with this email not found for otp validation");
@@ -248,7 +248,8 @@ export const refreshNewToken = asyncHandler(async (req, res) => {
 })
 
 export const getAllUsers = asyncHandler(async (req, res) => {
-    const users = await User.find({});
+    const loggedInUser= req.user._id;
+    const users = await User.find({_id:{$ne:loggedInUser}}).select('-password');
     return res.status(200).json(
         new ApiResponse(200, users, "All Users fetched successfully")
     )
