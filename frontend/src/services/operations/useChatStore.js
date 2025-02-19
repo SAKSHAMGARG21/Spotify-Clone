@@ -3,13 +3,12 @@ import { authApis } from "../apis";
 import { setError, setisConnected, setisLoading, setMessages, setonlineUsers, setSelectedUser, setSocket, setUserActivities, setUsers } from "@/slices/chatSlice";
 import axios from "axios";
 import { setLoading } from "@/slices/authSlice";
-import { useEffect } from "react";
 import Basedata from "@/config/Basedata";
 import { io } from "socket.io-client";
 
 const { GetMessages } = authApis;
 
-const baseURL = Basedata.Baseurl;
+const baseURL = "http://localhost:5000/" ;
 const socket = io(baseURL, {
     autoConnect: false,
     withCredentials: true,
