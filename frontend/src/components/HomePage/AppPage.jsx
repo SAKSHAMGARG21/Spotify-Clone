@@ -16,7 +16,7 @@ function AppPage() {
   const { initializeQueue } = usePlayerStore();
   const getTopRatedSongsData = async () => {
     setLoading(true);
-    const songdata = await gettopRatedSongs();
+    const songdata = await gettopRatedSongs(token);
     setTopRatedSongs(songdata);
     setLoading(false);
   };
@@ -25,7 +25,7 @@ function AppPage() {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     setLoading(true);
-    const songData = await getSongByYear(year);
+    const songData = await getSongByYear(year,token);
     setYearSongs(songData);
     setLoading(false);
   }

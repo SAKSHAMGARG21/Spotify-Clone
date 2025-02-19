@@ -7,7 +7,8 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 export const verifyJwt = asyncHandler(async (req, res, next) => {
     try {
-        const token = req.body.token || req.cookies.token || req.get("Authorization")?.replace("Bearer", "");
+        const token = req.body.token || req.cookies.token || req.get("Authorization")?.replace("Bearer ", "");
+        // console.log(token);
 
         if (!token) {
             throw new ApiError(401, "Unauthorized request");

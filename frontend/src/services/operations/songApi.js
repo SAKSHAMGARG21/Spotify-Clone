@@ -26,9 +26,13 @@ export const createSongs = async () => {
     }
 }
 
-export const getfeaturedSongs = async () => {
+export const getfeaturedSongs = async (token) => {
     try {
-        const res = await axios.get(FeaturedSongs);
+        const res = await axios.get(FeaturedSongs, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         return res.data.data;
     } catch (error) {
         console.log("Api error in fetching featuredsongs...", error);
@@ -41,15 +45,18 @@ export const getSongById = async (id) => {
         console.log(res);
         return res.data.data;
     } catch (error) {
-
         console.log("Api error in getting song by Id...", error);
         toast.error(error.message);
     }
 }
-export const gettopRatedSongs = async () => {
+export const gettopRatedSongs = async (token) => {
     try {
         const toastId = toast.loading("Loading...");
-        const res = await axios.get(TopSongs);
+        const res = await axios.get(TopSongs, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         // console.log(res);
         toast.dismiss(toastId);
         return res.data.data;
@@ -59,13 +66,16 @@ export const gettopRatedSongs = async () => {
     }
 }
 
-export const getSongByYear = async (year) => {
+export const getSongByYear = async (year, token) => {
     try {
-        const res = await axios.post(SongsByYear, {year});
+        const res = await axios.post(SongsByYear, { year }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         // console.log(res);
         return res.data.data;
     } catch (error) {
-        
         console.log("Api error in Getting Song by year...", error);
         toast.error(error.message);
     }
@@ -73,7 +83,7 @@ export const getSongByYear = async (year) => {
 
 export const getAlbum = async (artist) => {
     try {
-        const res = await axios.post(GetAlbum,{artist});
+        const res = await axios.post(GetAlbum, { artist });
         // console.log(res);
         return res.data.data;
     } catch (error) {

@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react'
 import FeaturedGridSkeleton from '../skeletons/FeaturedGridSkeleton';
 import { getfeaturedSongs } from '@/services/operations/songApi';
 import PlayButton from '../common/PlayButton';
+import { useSelector } from 'react-redux';
 
 function FeaturedSection() {
     const [featuredSongs, setFeaturedSongs] = useState([]);
     const [isLoading, setLoading] = useState();
     const [error, setError] = useState(null);
-
+    const {token} = useSelector(state=>state.auth);
     useEffect(() => {
         const getFeaturedSongsdata = async () => {
             setLoading(true);
-            const res = await getfeaturedSongs();
+            const res = await getfeaturedSongs(token);
             setLoading(false);
             setFeaturedSongs(res);
         }

@@ -109,10 +109,14 @@ export const logout = (navigate) => {
     }
 }
 
-export const fetchUsers = async () => {
+export const fetchUsers = async (token) => {
     try {
         const toastId = toast.loading("Loading...");
-        const res = await axios.get(FetchUsers);
+        const res = await axios.get(FetchUsers,{
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         toast.dismiss(toastId);
         return res.data.data;
     } catch (error) {

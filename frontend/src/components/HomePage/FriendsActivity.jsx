@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 function FriendsActivity() {
-    const { user } = useSelector((state) => state.auth);
+    const { user ,token} = useSelector((state) => state.auth);
     const { onlineUsers ,userActivities} = useSelector((state) => state.chat);
     const [users, setUsers] = useState([]);
     const [loginuser,setLoginUser]=useState('');
@@ -14,7 +14,7 @@ function FriendsActivity() {
     const onlineUsersSet = new Set(onlineUsers);
     const fetchData = async () => {
         if (user) {
-            const res = await fetchUsers();
+            const res = await fetchUsers(token);
             setUsers(res);
         };
     }
