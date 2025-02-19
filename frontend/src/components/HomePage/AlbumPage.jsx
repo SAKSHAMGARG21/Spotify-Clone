@@ -106,7 +106,7 @@ function AlbumPage() {
                         </div>
                         <div className='px-6'>
                             <div className='space-y-2 py-4'>
-                                {currAlbum?.songs.map((song, index) => {
+                                {currAlbum?.songs?.map((song, index) => {
                                     const isCurrentSong = currentSong?._id === song._id;
                                     return (
                                         <div key={song._id}

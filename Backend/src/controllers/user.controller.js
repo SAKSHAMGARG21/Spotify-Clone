@@ -260,6 +260,11 @@ export const isAdmin = asyncHandler(async (req, res) => {
         new ApiResponse(200, true, "Yes")
     )
 })
+export const isUserLogin = asyncHandler(async (req, res) => {
+    return res.status(200).json(
+        new ApiResponse(200, true, "Yes")
+    )
+})
 
 export const getMessages = asyncHandler(async (req, res) => {
     const myId = req.user;

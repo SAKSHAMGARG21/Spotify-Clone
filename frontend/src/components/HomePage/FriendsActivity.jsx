@@ -19,7 +19,7 @@ function FriendsActivity() {
         };
     }
     useEffect(() => {
-        console.log(userActivities);
+        // console.log(userActivities);
         setLoginUser(user?._id);
         fetchData();
     }, [fetchUsers, user]);

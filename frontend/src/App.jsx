@@ -11,7 +11,7 @@ import { authApis } from './services/apis';
 import { useDispatch } from 'react-redux';
 import PrivateRoute from './components/Auth/PrivateRoute';
 import OpenRoute from './components/Auth/OpenRoute';
-import { setToken, setUser } from './slices/authSlice';
+import { setIsLogined, setToken, setUser } from './slices/authSlice';
 import GoogleAuthWrapper from './components/Auth/GoogleAuthWrapper';
 import ChatBox from './components/chat/ChatBox';
 import MainLayout from './layout/MainLayout';
@@ -20,6 +20,7 @@ import AlbumPage from './components/HomePage/AlbumPage';
 import AdminPage from './pages/AdminPage';
 import { useCookies } from 'react-cookie';
 import { toast } from 'react-toastify';
+import { isUserLogin } from './services/operations/authApi';
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -40,7 +41,10 @@ function App() {
   // }
   useEffect(() => {
     // const checkUser = async () => {
-    //   await UserExists();
+    //   // await UserExists();
+    //   const res=await isUserLogin();
+    //   console.log(res);
+    //   dispatch(setIsLogined(res));
     // }
     // checkUser();
     toast.dismiss();

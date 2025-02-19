@@ -11,7 +11,8 @@ const {
     Logout,
     Profile,
     FetchUsers,
-    IsAdmin
+    IsAdmin,
+    UserAuthenticated
 } = authApis
 
 export const googleAuth = async (code) => {
@@ -66,7 +67,7 @@ export const login = (data, navigate) => {
         toast.dismiss();
         const toastId = toast.loading("Loading...");
         dispatch(setLoading(true));
-        let res=null;
+        let res = null;
         try {
             const { email, password } = data;
             res = await axios.post(Login, { email, password });
@@ -91,10 +92,7 @@ export const logout = (navigate) => {
         const toastId = toast.loading("Loading...");
         dispatch(setLoading(true));
         try {
-            // const res = await axios.get(Logout);
-            // if (!res.data.success) {
-                // toast.error(res.data.message);
-            // }
+            await axios.patch(Logout);
             localStorage.removeItem("user");
             localStorage.removeItem("token");
             dispatch(setToken(null));
@@ -130,5 +128,14 @@ export const isAdmin = async () => {
     } catch (error) {
         // console.log("Api Error in fetching checking Admin...", error);
         // toast.error(error?.response?.data?.message || error.message)
+    }
+}
+export const isUserLogin = async () => {
+    try {
+        const res = await axios.get(UserAuthenticated);
+        return res.data.data;
+    } catch (error) {
+        console.log("Api Error in fetching checking loinguser...", error);
+        toast.error(error?.response?.data?.message || error.message)
     }
 }

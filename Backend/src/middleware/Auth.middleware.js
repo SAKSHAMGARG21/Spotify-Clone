@@ -68,3 +68,33 @@ export const mainAdmin = asyncHandler(async (req, res, next) => {
     next();
 })
 
+export const checkloingStatus = asyncHandler(async (req, res,next) => {
+    try {
+        const token = req.cookies.token || req.body.token;
+        const decodedUser = jwt.verify(token, process.env.TOKEN_SECRET);
+
+        if (!decodedUser) {
+            return res.status(230).json(
+                new ApiResponse(230, false, "No")
+            )
+        }
+
+        const user = await User.findById(decodedUser._id);
+
+        if (!user) {
+            return res.status(230).json(
+                new ApiResponse(230, false, "No")
+            )
+        }
+
+        if (!user.token || user.token !== token) {
+            return res.status(230).json(
+                new ApiResponse(230, false, "No")
+            )
+        }
+        next();
+    }
+    catch (error) {
+        // console.log("Error in checkloginuser",error);
+    }
+})

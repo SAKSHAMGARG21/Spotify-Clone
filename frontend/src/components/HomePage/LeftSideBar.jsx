@@ -55,7 +55,7 @@ function LeftSideBar() {
                         {
                             user || token ? (
                                 isLoading ? (<PlaylistSkeleton />) : (
-                                    albumData.map((album) => (
+                                    albumData?.map((album) => (
                                         <Link to={`/album/${album._id}`} key={album._id}
                                             className='p-2 hover:bg-zinc-800 rounded-md flex text-left items-center gap-3 cursor-pointer'>
                                             <img src={album.imageUrl} alt={album.title} className=' size-12 rounded-md flex-shrink-0 object-cover' />

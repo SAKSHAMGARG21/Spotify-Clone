@@ -10,7 +10,8 @@ export const authApis = {
     CheckToken: Basedata.BackendUrl + "/user/checktoken",
     FetchUsers: Basedata.BackendUrl + "/user/getusers",
     AdminRoute: Basedata.BackendUrl + "/user/admin",
-    GetMessages:Basedata.BackendUrl + "/user/getmessage"
+    GetMessages: Basedata.BackendUrl + "/user/getmessage",
+    UserAuthenticated: Basedata.BackendUrl + "/user/isuserlogin"
 }
 
 export const songApis = {

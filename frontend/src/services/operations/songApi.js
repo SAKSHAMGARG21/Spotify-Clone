@@ -41,6 +41,7 @@ export const getSongById = async (id) => {
         console.log(res);
         return res.data.data;
     } catch (error) {
+
         console.log("Api error in getting song by Id...", error);
         toast.error(error.message);
     }
@@ -64,6 +65,7 @@ export const getSongByYear = async (year) => {
         // console.log(res);
         return res.data.data;
     } catch (error) {
+        
         console.log("Api error in Getting Song by year...", error);
         toast.error(error.message);
     }

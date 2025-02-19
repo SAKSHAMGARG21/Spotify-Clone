@@ -17,14 +17,14 @@ router.route("/createsong").post(
         }
     ]), createSong);
 
-router.route("/getsongs").get(getSongs);
+router.route("/getsongs").get(verifyJwt,getSongs);
 router.route("/getfeaturesongs").get(verifyJwt,getFeaturedSongs);
 router.route("/getsongsbyid/:songId").get(verifyJwt,getSongById);
 router.route("/gettopSongs").get(verifyJwt,getTopRatedSongs);
 router.route("/getsongsbyyear").post(verifyJwt,getSongsByYear);
 router.route("/getalbum").post(getAlbum);
 
-router.route("/deletesongbyid/:songId").delete(deleteSongById);
-router.route("/deletesongsByIds").delete(deleteSongsByIds);
+router.route("/deletesongbyid/:songId").delete(verifyJwt,deleteSongById);
+router.route("/deletesongsByIds").delete(verifyJwt,deleteSongsByIds);
 
 export default router;

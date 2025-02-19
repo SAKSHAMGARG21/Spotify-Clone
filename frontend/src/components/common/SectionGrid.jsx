@@ -15,7 +15,7 @@ function SectionGrid({ title, songs, isLoading }) {
       </div>
 
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
-        {songs.map((song) => (
+        {songs?.map((song) => (
           <div
             key={song._id}
             className='bg-zinc-400/20 p-4 text-left rounded-md hover:bg-zinc-700/40 transition-all group cursor-pointer'

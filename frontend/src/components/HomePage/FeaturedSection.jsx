@@ -23,7 +23,7 @@ function FeaturedSection() {
 
     return (
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8'>
-            {featuredSongs.map((song) => (
+            {featuredSongs?.map((song) => (
                 <div
                     key={song._id}
                     className='flex items-center justify-start text-left bg-zinc-400/20 backdrop-blur-xl rounded-md overflow-hidden
