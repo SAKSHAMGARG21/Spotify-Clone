@@ -8,7 +8,7 @@ import { io } from "socket.io-client";
 
 const { GetMessages } = authApis;
 
-const baseURL = "http://localhost:5000/" ;
+const baseURL = Basedata.Baseurl ;
 const socket = io(baseURL, {
     autoConnect: false,
     withCredentials: true,
