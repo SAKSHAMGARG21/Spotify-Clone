@@ -101,7 +101,11 @@ export const useChatStore = () => {
         try {
             dispatch(setLoading(true));
             dispatch(setError(null));
-            const res = await axios.get(`${GetMessages}/${userId}`);
+            const res = await axios.get(`${GetMessages}/${userId}`,{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             // console.log(res);
             dispatch(setLoading(false));
             dispatch(setMessages(res.data.data));
