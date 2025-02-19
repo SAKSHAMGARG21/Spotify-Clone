@@ -92,7 +92,7 @@ export const logout = (navigate) => {
         const toastId = toast.loading("Loading...");
         dispatch(setLoading(true));
         try {
-            await axios.patch(Logout);
+            // await axios.patch(Logout);
             localStorage.removeItem("user");
             localStorage.removeItem("token");
             dispatch(setToken(null));
