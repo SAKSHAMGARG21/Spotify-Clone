@@ -16,7 +16,8 @@ const socket = io(baseURL, {
 export const useChatStore = () => {
 
     const dispatch = useDispatch();
-    const { selectedUser, isConnected, onlineUsers, userActivities, messages } = useSelector((state) => state.chat);
+    const{token} = useSelector(state=>state.auth);
+    const {isConnected, onlineUsers, userActivities, messages } = useSelector((state) => state.chat);
     const { FetchUsers } = authApis;
 
     const setSelectedUserStore = (user) => {
@@ -26,7 +27,11 @@ export const useChatStore = () => {
     const fetchUsers = async () => {
         try {
             dispatch(setisLoading(true));
-            const res = await axios.get(FetchUsers);
+            const res = await axios.get(FetchUsers,{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             dispatch(setisLoading(false));
             dispatch(setUsers(res.data.data));
         } catch (error) {
